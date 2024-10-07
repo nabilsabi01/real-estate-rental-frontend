@@ -1,0 +1,23 @@
+<section id="featured-properties" class="featured-properties">
+  <div class="container">
+    <h2 class="section-title">Featured Properties</h2>
+    <div class="property-grid">
+      @for (property of featuredProperties; track property.id) {
+        <div class="property-card">
+          <img [src]="property.image" [alt]="property.name">
+          <div class="property-info">
+            <h3>{{ property.name }}</h3>
+            <p class="location">{{ property.location }}</p>
+            <p class="price">${{ property.price }} / night</p>
+            <div class="rating">
+              @for (star of getStarArray(property.rating); track star) {
+                <i class="fas fa-star"></i>
+              }
+              {{ property.rating }} ({{ property.reviews }} reviews)
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

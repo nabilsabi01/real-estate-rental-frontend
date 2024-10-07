@@ -1,0 +1,19 @@
+<section id="testimonials" class="testimonials">
+  <div class="container">
+    <h2 class="section-title">What Our Guests Say</h2>
+    <div class="testimonial-grid">
+      @for (testimonial of testimonials; track testimonial.id) {
+        <div class="testimonial-card">
+          <img [src]="testimonial.image" [alt]="testimonial.name" class="testimonial-image">
+          <h3>{{ testimonial.name }}</h3>
+          <p>{{ testimonial.comment }}</p>
+          <div class="rating">
+            @for (star of getStarArray(testimonial.rating); track star) {
+              <i class="fas fa-star"></i>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+<form class="search-form" (ngSubmit)="onSearch()">
+  <div class="search-input">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Where do you want to go?" [(ngModel)]="searchData.destination" name="destination" required>
+  </div>
+  <div class="search-input">
+    <i class="fas fa-calendar-alt"></i>
+    <input type="date" [(ngModel)]="searchData.checkIn" name="checkIn" required>
+  </div>
+  <div class="search-input">
+    <i class="fas fa-calendar-alt"></i>
+    <input type="date" [(ngModel)]="searchData.checkOut" name="checkOut" required>
+  </div>
+  <div class="search-input">
+    <i class="fas fa-user"></i>
+    <input type="number" min="1" [(ngModel)]="searchData.guests" name="guests" required>
+  </div>
+  <button type="submit" class="search-btn">Search</button>
+</form>
