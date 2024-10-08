@@ -1,8 +1,6 @@
-import { Property } from "./property.model";
-
 export interface Photo {
-    id: number;
-    property: Property;
-    photoUrl: string;
-    uploadedAt: Date;
+  id: number;
+  propertyId: number;
+  photoUrl: string;
+  uploadedAt: Date;
 }

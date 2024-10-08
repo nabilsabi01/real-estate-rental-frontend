@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {SearchBarComponent} from "../../../shared/components/search-bar/search-bar.component";
+import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, SearchBarComponent, SearchBarComponent],
+  imports: [CommonModule, SearchBarComponent],
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.css']
 })
@@ -14,5 +14,6 @@ export class HeroComponent {
 
   onSearch(searchData: any) {
     console.log('Search data:', searchData);
+    // Implement search logic here
   }
 }

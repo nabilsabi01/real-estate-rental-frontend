@@ -2,6 +2,10 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
+  },
+  {
     path: 'auth',
     children: [
       {
@@ -18,6 +22,10 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
+  },
+  {
+    path: 'property/:id',
+    loadComponent: () => import('./features/property-details/property-details.component').then(m => m.PropertyDetailsComponent)
   },
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
 ];

@@ -1,23 +1,45 @@
-<section id="featured-properties" class="featured-properties">
+<section id="featured-properties" class="section featured-properties">
   <div class="container">
     <h2 class="section-title">Featured Properties</h2>
-    <div class="property-grid">
-      @for (property of featuredProperties; track property.id) {
-        <div class="property-card">
-          <img [src]="property.image" [alt]="property.name">
-          <div class="property-info">
-            <h3>{{ property.name }}</h3>
-            <p class="location">{{ property.location }}</p>
-            <p class="price">${{ property.price }} / night</p>
-            <div class="rating">
-              @for (star of getStarArray(property.rating); track star) {
-                <i class="fas fa-star"></i>
-              }
-              {{ property.rating }} ({{ property.reviews }} reviews)
-            </div>
+
+    <div class="loading-spinner" *ngIf="isLoading">
+      Loading...
+    </div>
+
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <div class="property-grid" *ngIf="!isLoading && !error">
+      <div class="property-card" *ngFor="let property of featuredProperties; let i = index" (mouseenter)="startImageRotation(i)" (mouseleave)="stopImageRotation(i)">
+        <div class="property-image-container">
+          <div class="property-image" *ngFor="let photo of property.photos; let j = index" [style.background-image]="'url(' + photo.photoUrl + ')'" [class.active]="j === activeImageIndex[i]">
+          </div>
+
+          <div class="image-navigation">
+            <button class="nav-btn prev" (click)="prevImage(i, $event)">❮</button>
+            <button class="nav-btn next" (click)="nextImage(i, $event)">❯</button>
+          </div>
+
+          <button class="favorite-btn" [class.active]="property.isFavorited" (click)="toggleFavorite(property, $event)">
+            <span class="favorite-icon">♥</span>
+            <span class="favorite-text">{{ property.isFavorited ? 'Favorited' : 'Favorite' }}</span>
+          </button>
+        </div>
+
+        <div class="property-info">
+          <h3>{{ property.title }}</h3>
+          <p class="location">
+            <i class="location-icon"></i>
+            {{ property.location.city }}, {{ property.location.country }}
+          </p>
+          <p class="price">${{ property.pricePerNight }} / night</p>
+          <div class="rating">
+            <i class="star-icon"></i>
+            {{ property.averageRating | number:'1.1-1' }} ({{ property.totalReviews }} reviews)
           </div>
         </div>
-      }
+      </div>
     </div>
   </div>
 </section>

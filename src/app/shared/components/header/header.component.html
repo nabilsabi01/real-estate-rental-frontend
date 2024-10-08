@@ -10,9 +10,9 @@
           <li><a href="#testimonials" [class.active]="currentSection === 'testimonials'">Testimonials</a></li>
         </ul>
       </nav>
-      <div class="auth-buttons">
-        <a href="#" class="btn btn-secondary">Sign Up</a>
-        <a href="#" class="btn btn-primary">Log In</a>
+      <div class="auth-buttons" *ngIf="!isLogging()">
+        <a routerLink="/auth/signup"  routerLinkActive="router-link-active" class="btn btn-secondary">Sign Up</a>
+        <a routerLink="/auth/login"  class="btn btn-primary">Log In</a>
       </div>
     </div>
   </header>

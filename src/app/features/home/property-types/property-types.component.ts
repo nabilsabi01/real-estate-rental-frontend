@@ -13,6 +13,7 @@ import { NgForOf } from "@angular/common";
   styleUrls: ['./property-types.component.css']
 })
 export class PropertyTypesComponent implements OnInit {
+
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   propertyTypes: PropertyType[] = [];
 
