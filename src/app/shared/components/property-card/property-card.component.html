@@ -1,0 +1,46 @@
+<div class="property-card">
+  <div class="property-image-container">
+    <div *ngFor="let photo of property.photos; let i = index"
+         class="property-image"
+         [class.active]="i === activeImageIndex"
+         [style.background-image]="loadedImages[i] ? 'url(' + photo.photoUrl + ')' : 'none'"
+         [class.loading]="!loadedImages[i]"
+         [attr.aria-hidden]="i !== activeImageIndex">
+      <div *ngIf="!loadedImages[i]" class="image-placeholder">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <div class="image-navigation">
+      <button class="nav-btn" (click)="prevImage($event)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button class="nav-btn" (click)="nextImage($event)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <button class="favorite-btn" [class.active]="isFavorite" (click)="toggleFavorite($event)" aria-label="Toggle favorite">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="property-info">
+    <h3 class="property-title">{{ property.title }}</h3>
+    <p class="location">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3"></circle></svg>
+      {{ property.location.city }}, {{ property.location.country }}
+    </p>
+    <p class="price">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      {{ property.pricePerNight | currency }} / night
+    </p>
+    <div *ngIf="property.averageRating" class="rating">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <span>{{ property.averageRating | number:'1.1-1' }}</span>
+      <span class="review-count">({{ property.totalReviews }} reviews)</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<section class="popular-destinations" id="popular-destinations">
+    <div class="container">
+      <h2 class="section-title">Popular Vacation Rental Destinations</h2>
+      <div class="destinations-grid">
+        <div *ngFor="let destination of destinations" class="destination-card">
+          <img [src]="destination.image" [alt]="destination.name" class="destination-image">
+          <div class="destination-info">
+            <h3 class="destination-name">{{ destination.name }}</h3>
+            <p class="destination-description">{{ destination.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
