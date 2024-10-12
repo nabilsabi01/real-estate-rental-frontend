@@ -8,11 +8,12 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ReviewService {
-  private apiUrl = `${environment.apiUrl}/api/v1/reviews`;
+  private apiUrl = `${environment.apiUrl}/v1/reviews`;
 
   constructor(private http: HttpClient) {}
 
-  createReview(review: Review): Observable<Review> {
+
+  createReview(review: Partial<Review>): Observable<Review> {
     return this.http.post<Review>(this.apiUrl, review);
   }
 

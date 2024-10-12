@@ -24,8 +24,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
   },
   {
-    path: 'property/:id',
-    loadComponent: () => import('./features/property-details/property-details.component').then(m => m.PropertyDetailsComponent)
+    path: 'favorites',
+    loadComponent: () => import('./features/favorites/favorites.component').then(m => m.FavoritesComponent)
   },
+  // {
+  //   path: 'property/:id',
+  //   loadComponent: () => import('./features/property-details/property-details.component').then(m => m.P)
+  // },
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
 ];

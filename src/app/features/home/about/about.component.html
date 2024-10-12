@@ -1,11 +1,23 @@
-<section id="about" class="about">
+<section id="about" class="section about">
   <div class="container">
     <h2 class="section-title">About EasyStay</h2>
-    <p class="about-description">EasyStay is your trusted partner in finding the perfect vacation rental. With a wide range of properties and exceptional customer service, we ensure your stay is comfortable and memorable.</p>
-    <ul class="features">
-      @for (feature of features; track feature.text) {
-        <li><i class="fas {{ feature.icon }}"></i> {{ feature.text }}</li>
-      }
-    </ul>
+    
+    <div class="about-content">
+      <div class="about-description">
+        <p>EasyStay is your trusted partner in finding the perfect vacation rental. With a wide range of properties and exceptional customer service, we ensure your stay is comfortable and memorable.</p>
+      </div>
+      
+      <div class="features-wrapper">
+        <h3 class="features-title">Why Choose EasyStay?</h3>
+        <ul class="features">
+          @for (feature of features; track feature.text) {
+            <li class="feature-item">
+              <i class="fas {{ feature.icon }}"></i>
+              <span>{{ feature.text }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
   </div>
 </section>

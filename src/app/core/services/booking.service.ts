@@ -8,13 +8,23 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+
 export class BookingService {
   private apiUrl = `${environment.apiUrl}/api/v1/bookings`;
 
   constructor(private http: HttpClient) {}
 
-  createBooking(booking: Booking): Observable<Booking> {
+
+  createBooking(booking: Partial<Booking>): Observable<Booking> {
     return this.http.post<Booking>(this.apiUrl, booking);
+  }
+
+  isBookingAvailable(propertyId: number, checkIn: Date, checkOut: Date): Observable<boolean> {
+    const params = new HttpParams()
+      .set('propertyId', propertyId.toString())
+      .set('checkIn', checkIn.toISOString())
+      .set('checkOut', checkOut.toISOString());
+    return this.http.get<boolean>(`${this.apiUrl}/availability`, { params });
   }
 
   getBooking(id: number): Observable<Booking> {
@@ -43,5 +53,13 @@ export class BookingService {
 
   cancelBooking(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getBookingPrice(propertyId: number, checkInDate: Date, checkOutDate: Date): Observable<number> {
+    const params = new HttpParams()
+      .set('propertyId', propertyId.toString())
+      .set('checkInDate', checkInDate.toISOString())
+      .set('checkOutDate', checkOutDate.toISOString());
+    return this.http.get<number>(`${this.apiUrl}/price`, { params });
   }
 }

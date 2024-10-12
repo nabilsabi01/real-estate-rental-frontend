@@ -24,13 +24,15 @@
 
 .property-type-scroll {
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
 .property-type-scroll::-webkit-scrollbar {
-  display: none; /* WebKit */
+  display: none;
 }
 
 .property-type-grid {
@@ -41,6 +43,7 @@
 
 .property-type-card {
   flex: 0 0 250px;
+  scroll-snap-align: start;
   background-color: var(--card-bg);
   border-radius: 15px;
   overflow: hidden;
@@ -53,11 +56,26 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.property-type-image {
+.property-type-image-container {
   height: 200px;
-  background-size: cover;
-  background-position: center;
   position: relative;
+  background-color: #f0f0f0;
+  overflow: hidden;
+}
+
+.property-type-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.property-type-image.lazy {
+  opacity: 0;
+}
+
+.property-type-image.loaded {
+  opacity: 1;
 }
 
 .property-type-overlay {
@@ -66,13 +84,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(7, 31, 41, 0.6), rgba(28, 31, 46, 0.6));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .property-type-card:hover .property-type-overlay {
   opacity: 1;
+}
+
+.property-type-card:hover .property-type-image {
+  transform: scale(1.05);
 }
 
 .property-type-name {
@@ -88,7 +110,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -99,6 +121,11 @@
   justify-content: center;
   cursor: pointer;
   z-index: 1;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 1);
 }
 
 .nav-button.prev {
@@ -107,4 +134,28 @@
 
 .nav-button.next {
   right: 10px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .property-type-card {
+    flex: 0 0 200px;
+  }
+  
+  .nav-button {
+    width: 32px;
+    height: 32px;
+    font-size: 1.25rem;
+  }
 }

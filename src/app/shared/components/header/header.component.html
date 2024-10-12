@@ -1,19 +1,21 @@
 <header [class.scrolled]="isScrolled">
-    <div class="container">
-      <a href="#" class="logo">EasyStay</a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#home" [class.active]="currentSection === 'home'">Home</a></li>
-          <li><a href="#property-types" [class.active]="currentSection === 'property-types'">Property Types</a></li>
-          <li><a href="#featured-properties" [class.active]="currentSection === 'featured-properties'">Featured</a></li>
-          <li><a href="#about" [class.active]="currentSection === 'about'">About</a></li>
-          <li><a href="#testimonials" [class.active]="currentSection === 'testimonials'">Testimonials</a></li>
-        </ul>
-      </nav>
-      <div class="auth-buttons" *ngIf="!isLogging()">
-        <a routerLink="/auth/signup"  routerLinkActive="router-link-active" class="btn btn-secondary">Sign Up</a>
-        <a routerLink="/auth/login"  class="btn btn-primary">Log In</a>
-      </div>
+  <div class="container">
+    <a href="#" class="logo">EasyStay</a>
+    
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#home" [class.active]="currentSection === 'home'">Home</a></li>
+        <li><a href="#property-types" [class.active]="currentSection === 'property-types'">Property Types</a></li>
+        <li><a href="#featured-properties" [class.active]="currentSection === 'featured-properties'">Featured</a></li>
+        <li><a href="#about" [class.active]="currentSection === 'about'">About</a></li>
+        <li><a href="#testimonials" [class.active]="currentSection === 'testimonials'">Testimonials</a></li>
+        <li><a href="/favorites" [class.active]="" *ngIf="isLogging()">Favorites</a></li>
+      </ul>
+    </nav>
+
+    <div class="auth-buttons" *ngIf="!isLogging()">
+      <a routerLink="/auth/signup" class="btn btn-secondary">Sign Up</a>
+      <a routerLink="/auth/login" class="btn btn-primary">Log In</a>
     </div>
-  </header>
-  
+  </div>
+</header>

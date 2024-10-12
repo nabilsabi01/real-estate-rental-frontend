@@ -1,50 +1,60 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { PropertyService } from "../../../core/services/property.service";
-import { Property } from "../../../core/models/property.model";
-import { Subscription, interval } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { RouterModule } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+
+import { Property } from '../../../core/models/property.model';
+import { Favorite } from '../../../core/models/favorite.model';
+import { PropertyService } from '../../../core/services/property.service';
+import { FavoriteService } from '../../../core/services/favorite.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { PropertyCardComponent } from '../../../shared/components/property-card/property-card.component';
+import {ProgressSpinnerModule} from "primeng/progressspinner";
 
 @Component({
   selector: 'app-featured-properties',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ToastModule,
+    ButtonModule,
+    RippleModule,
+    PropertyCardComponent,
+    ProgressSpinnerModule
+  ],
   templateUrl: './featured-properties.component.html',
-  styleUrls: ['./featured-properties.component.css'],
-  providers: [PropertyService]
+  styleUrls: ['./featured-properties.component.css']
 })
-export class FeaturedPropertiesComponent implements OnInit, OnDestroy {
+export class FeaturedPropertiesComponent implements OnInit {
   featuredProperties: Property[] = [];
-  activeImageIndex: number[] = [];
-  isLoading: boolean = true;
+  isLoading = true;
   error: string | null = null;
-  private imageIntervals: Subject<void>[] = [];
-  private destroy$ = new Subject<void>();
 
-  constructor(private propertyService: PropertyService) {}
+  constructor(
+    private propertyService: PropertyService,
+    private favoriteService: FavoriteService,
+    private authService: AuthService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.loadFeaturedProperties();
-  }
-
-  ngOnDestroy(): void {
-    this.stopAllImageRotations();
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   loadFeaturedProperties(): void {
     this.isLoading = true;
     this.error = null;
     this.propertyService.getFeaturedProperties().subscribe({
-      next: (properties: Property[]) => {
+      next: (properties) => {
         this.featuredProperties = properties;
-        this.activeImageIndex = new Array(properties.length).fill(0);
         this.isLoading = false;
+        this.checkFavoriteStatus();
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error fetching featured properties:', error);
         this.error = 'Failed to load featured properties. Please try again later.';
         this.isLoading = false;
@@ -52,57 +62,60 @@ export class FeaturedPropertiesComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleFavorite(property: Property, event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.propertyService.toggleFavorite(property.id).subscribe({
-      next: () => {
-        property.isFavorited = !property.isFavorited;
-      },
-      error: (error) => {
-        console.error('Error toggling favorite:', error);
-      }
-    });
-  }
-
-  prevImage(index: number, event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    const currentProperty = this.featuredProperties[index];
-    this.activeImageIndex[index] = (this.activeImageIndex[index] - 1 + currentProperty.photos.length) % currentProperty.photos.length;
-  }
-
-  nextImage(index: number, event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    const currentProperty = this.featuredProperties[index];
-    this.activeImageIndex[index] = (this.activeImageIndex[index] + 1) % currentProperty.photos.length;
-  }
-
-  startImageRotation(index: number): void {
-    this.stopImageRotation(index);
-    this.imageIntervals[index] = new Subject<void>();
-    interval(3000)
-      .pipe(takeUntil(this.imageIntervals[index]))
-      .subscribe(() => {
-        this.activeImageIndex[index] = (this.activeImageIndex[index] + 1) % this.featuredProperties[index].photos.length;
+  checkFavoriteStatus(): void {
+    const userId = this.authService.getCurrentUserId();
+    if (userId) {
+      this.featuredProperties.forEach(property => {
+        this.favoriteService.isFavorite(property.id).subscribe({
+          next: (isFavorite: boolean) => {
+            property.isFavorited = isFavorite;
+          },
+          error: (error: unknown) => {
+            console.error('Error checking favorite status:', error);
+          }
+        });
       });
-  }
-
-  stopImageRotation(index: number): void {
-    if (this.imageIntervals[index]) {
-      this.imageIntervals[index].next();
-      this.imageIntervals[index].complete();
     }
   }
 
-  stopAllImageRotations(): void {
-    this.imageIntervals.forEach((interval) => {
-      if (interval) {
-        interval.next();
-        interval.complete();
-      }
+  toggleFavorite(property: Property): void {
+    const userId = this.authService.getCurrentUserId();
+    if (!userId) {
+      this.showMessage('error', 'Login Required', 'You need to login to add a room to Favorites');
+      return;
+    }
+
+    if (property.isFavorited) {
+      this.favoriteService.removeFavorite(property.id).subscribe({
+        next: () => {
+          property.isFavorited = false;
+          this.showMessage('success', 'Favorites Updated', 'Removed from favorites');
+        },
+        error: (error: unknown) => {
+          console.error('Error removing favorite:', error);
+          this.showMessage('error', 'Error', 'Failed to remove from favorites');
+        }
+      });
+    } else {
+      this.favoriteService.addFavorite(property.id).subscribe({
+        next: (favorite: Favorite) => {
+          property.isFavorited = true;
+          this.showMessage('success', 'Favorites Updated', 'Added to favorites');
+        },
+        error: (error: unknown) => {
+          console.error('Error adding favorite:', error);
+          this.showMessage('error', 'Error', 'Failed to add to favorites');
+        }
+      });
+    }
+  }
+
+  private showMessage(severity: string, summary: string, detail: string): void {
+    this.messageService.add({
+      severity,
+      summary,
+      detail,
+      life: 3000
     });
-    this.imageIntervals = [];
   }
 }

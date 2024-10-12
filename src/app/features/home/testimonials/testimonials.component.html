@@ -1,19 +1,40 @@
-<section id="testimonials" class="testimonials">
+<section class="testimonials" id="testimonials">
   <div class="container">
-    <h2 class="section-title">What Our Guests Say</h2>
-    <div class="testimonial-grid">
-      @for (testimonial of testimonials; track testimonial.id) {
-        <div class="testimonial-card">
+    <h2 class="section-title">Testimonials</h2>
+    <div class="testimonials-carousel" [@slideAnimation]="currentIndex">
+      <div *ngFor="let testimonial of testimonials; let i = index" 
+           class="testimonial-card" 
+           [class.active]="i === currentIndex">
+        <div class="testimonial-content">
           <img [src]="testimonial.image" [alt]="testimonial.name" class="testimonial-image">
-          <h3>{{ testimonial.name }}</h3>
-          <p>{{ testimonial.comment }}</p>
-          <div class="rating">
-            @for (star of getStarArray(testimonial.rating); track star) {
-              <i class="fas fa-star"></i>
-            }
+          <div class="testimonial-info">
+            <h3 class="testimonial-name">{{ testimonial.name }}</h3>
+            <p class="testimonial-profession">{{ testimonial.profession }}</p>
+            <div class="testimonial-rating">
+              <span *ngFor="let star of [1, 2, 3, 4, 5]" 
+                    class="star" 
+                    [class.active]="star <= testimonial.rating">★</span>
+            </div>
           </div>
         </div>
-      }
+        <p class="testimonial-text">{{ testimonial.content }}</p>
+      </div>
+    </div>
+    <div class="testimonial-controls">
+      <button (click)="prevTestimonial()" class="nav-button prev" aria-label="Previous testimonial">
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <div class="testimonial-indicators">
+        <button *ngFor="let testimonial of testimonials; let i = index" 
+                (click)="goToTestimonial(i)" 
+                class="indicator" 
+                [class.active]="i === currentIndex"
+                [attr.aria-label]="'Go to testimonial ' + (i + 1)">
+        </button>
+      </div>
+      <button (click)="nextTestimonial()" class="nav-button next" aria-label="Next testimonial">
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
   </div>
 </section>

@@ -1,5 +1,9 @@
 /* styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import 'primeng/resources/primeng.min.css';
+@import 'primeicons/primeicons.css';
 
 :root {
   --dark-jungle-green: hsl(188, 63%, 7%);
@@ -19,19 +23,18 @@
   --opal: hsl(180, 20%, 62%);
 
   /* Semantic color assignments */
+  --primary-color: var(--yellow-green);
   --secondary-color: var(--orange-soda);
   --background-light: var(--cultured-2);
+  --background-dark: var(--dark-jungle-green);
   --text-dark: var(--raisin-black-1);
+  --text-light: var(--white);
   --text-muted: var(--cadet);
   --accent-color: var(--opal);
   --border-color: var(--cultured-1);
   --card-bg: var(--white);
   --gradient-start: var(--prussian-blue);
   --gradient-end: var(--raisin-black-2);
-
-  --background-dark: hsl(188, 63%, 7%);  /* Dark jungle green */
-  --text-light: hsl(0, 0%, 100%);  /* White */
-  --primary-color: hsl(89, 72%, 45%);  /* Yellow-green */
   --primary-blue: hsl(220, 100%, 50%);
 }
 
@@ -48,3 +51,89 @@ body {
   background-color: var(--background-light);
 }
 
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+.section-light {
+  background-color: var(--background-light);
+}
+
+.section-dark {
+  background-color: var(--background-dark);
+  color: var(--text-light);
+}
+
+
+.p-toast .p-toast-message {
+  border-width: 0 0 0 6px;
+}
+
+.p-toast .p-toast-message-success {
+  background-color: var(--alice-blue);
+  border-color: var(--yellow-green);
+  color: var(--text-dark);
+}
+
+.p-toast .p-toast-message-error {
+  background-color: var(--misty-rose);
+  border-color: var(--orange-soda);
+  color: var(--text-dark);
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mb-5 { margin-bottom: 3rem; }
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mt-5 { margin-top: 3rem; }
+
+.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-3 { padding-top: 1rem; padding-bottom: 1rem; }
+.py-4 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+
+.px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-3 { padding-left: 1rem; padding-right: 1rem; }
+.px-4 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.px-5 { padding-left: 3rem; padding-right: 3rem; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section {
+    padding: 2rem 0;
+  }
+
+  .container {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .section {
+    padding: 1.5rem 0;
+  }
+}

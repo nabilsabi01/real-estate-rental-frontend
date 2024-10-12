@@ -1,12 +1,17 @@
-<app-header [isScrolled]="isScrolled" [currentSection]="currentSection"></app-header>
-<app-hero></app-hero>
-<div class="component-spacer"></div>
-<app-property-types class="section section-light"></app-property-types>
-<div class="component-spacer"></div>
-<app-featured-properties class="section section-light"></app-featured-properties>
-<div class="component-spacer"></div>
-<app-about class="section section-dark"></app-about>
-<div class="component-spacer"></div>
-<app-testimonials class="section section-light"></app-testimonials>
-<div class="component-spacer"></div>
-<app-footer></app-footer>
+<main role="main">
+  <app-header [isScrolled]="isScrolled" [currentSection]="currentSection"></app-header>
+  <app-hero id="home"></app-hero>
+  <div class="component-spacer"></div>
+  <app-property-types id="property-types" class="section section-light"></app-property-types>
+  <div class="component-spacer"></div>
+  <app-featured-properties id="featured-properties" class="section section-dark"></app-featured-properties>
+  <div class="component-spacer"></div>
+  <app-about id="about" class="section section-light"></app-about>
+  <div class="component-spacer"></div>
+  <app-testimonials id="testimonials" class="section section-dark"></app-testimonials>
+  <div class="component-spacer"></div>
+  <app-popular-destinations class="section section-light"></app-popular-destinations>
+  <app-footer></app-footer>
+</main>
+
+<p-toast position="bottom-right"></p-toast>

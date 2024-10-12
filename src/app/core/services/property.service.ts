@@ -3,38 +3,39 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Property } from '../models/property.model';
 import { PropertyType } from '../models/property-type.enum';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PropertyService {
+  private apiUrl = `${environment.apiUrl}/v1/properties`;
+
   private propertyTypeImages: Record<PropertyType, string> = {
-    [PropertyType.APARTMENT]: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be',
-    [PropertyType.HOUSE]: 'https://images.unsplash.com/photo-1560185127-6f33a07ae109',
-    [PropertyType.VILLA]: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
-    [PropertyType.COTTAGE]: 'https://images.unsplash.com/photo-1599423300746-b62533397364',
-    [PropertyType.CHALET]: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
-    [PropertyType.BUNGALOW]: 'https://images.unsplash.com/photo-1601066522621-7c7460cfce80',
-    [PropertyType.CABIN]: 'https://images.unsplash.com/photo-1519137847-b06d0041e807',
-    [PropertyType.STUDIO]: 'https://images.unsplash.com/photo-1540501482015-eab1e73d8d9b',
-    [PropertyType.CONDO]: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750',
-    [PropertyType.PENTHOUSE]: 'https://images.unsplash.com/photo-1520551739604-300d8e39d7f6',
-    [PropertyType.LOFT]: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd',
-    [PropertyType.FARMHOUSE]: 'https://images.unsplash.com/photo-1534235931045-60e50b978f7a',
-    [PropertyType.TREEHOUSE]: 'https://images.unsplash.com/photo-1572274401801-ce308e2f17f8',
-    [PropertyType.BOAT]: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957',
-    [PropertyType.TENT]: 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-    [PropertyType.YURT]: 'https://images.unsplash.com/photo-1595350710489-c7c7b6eb9ae6',
-    [PropertyType.LUXURY_VILLA]: 'https://images.unsplash.com/photo-1534351590666-13e2c7b58a3f',
-    [PropertyType.BED_AND_BREAKFAST]: 'https://images.unsplash.com/photo-1571091718767-a5f539e0d97c',
-    [PropertyType.GUEST_HOUSE]: 'https://images.unsplash.com/photo-1582711012124-236c406b22aa'
+    [PropertyType.APARTMENT]: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&w=500&q=60',
+    [PropertyType.HOUSE]: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&w=500&q=60',
+    [PropertyType.VILLA]: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&w=500&q=60',
+    [PropertyType.COTTAGE]: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&w=500&q=60',
+    [PropertyType.CHALET]: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&w=500&q=60',
+    [PropertyType.BUNGALOW]: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&w=500&q=60', // Updated Bungalow URL
+    [PropertyType.CABIN]: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&w=500&q=60',
+    [PropertyType.STUDIO]: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&w=500&q=60',
+    [PropertyType.CONDO]: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&w=500&q=60', // Updated Condo URL
+    [PropertyType.PENTHOUSE]: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&w=500&q=60',
+    [PropertyType.LOFT]: 'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&w=500&q=60',
+    [PropertyType.FARMHOUSE]: 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&w=500&q=60',
+    [PropertyType.TREEHOUSE]: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&w=500&q=60',
+    [PropertyType.BOAT]: 'https://images.unsplash.com/photo-1566847438217-76e82d383f84?auto=format&w=500&q=60',
+    [PropertyType.TENT]: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&w=500&q=60',
+    [PropertyType.YURT]: 'https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&w=500&q=60',
+    [PropertyType.LUXURY_VILLA]: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&w=500&q=60',
+    [PropertyType.BED_AND_BREAKFAST]: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&w=500&q=60',
+    [PropertyType.GUEST_HOUSE]: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&w=500&q=60'
   };
 
-  private apiUrl = 'http://localhost:8081/api/v1/properties';
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  createProperty(property: Property, photos: File[]): Observable<Property> {
+  createProperty(property: Partial<Property>, photos: File[]): Observable<Property> {
     const formData = new FormData();
     formData.append('property', JSON.stringify(property));
     photos.forEach((photo, index) => {
@@ -61,12 +62,14 @@ export class PropertyService {
     return this.http.get<{content: Property[], totalPages: number, totalElements: number}>(this.apiUrl, { params });
   }
 
-  updateProperty(id: number, property: Property, photos: File[]): Observable<Property> {
+  updateProperty(id: number, property: Partial<Property>, photos?: File[]): Observable<Property> {
     const formData = new FormData();
     formData.append('property', JSON.stringify(property));
-    photos.forEach((photo, index) => {
-      formData.append(`photos`, photo, photo.name);
-    });
+    if (photos) {
+      photos.forEach((photo, index) => {
+        formData.append(`photos`, photo, photo.name);
+      });
+    }
     return this.http.put<Property>(`${this.apiUrl}/${id}`, formData);
   }
 
@@ -74,12 +77,42 @@ export class PropertyService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getFeaturedProperties(): Observable<Property[]> {
-    return this.http.get<Property[]>(`${this.apiUrl}/featured`);
+  getFeaturedProperties(guestId?: number): Observable<Property[]> {
+    let params = new HttpParams();
+    if (guestId) {
+      params = params.set('guestId', guestId.toString());
+    }
+    return this.http.get<Property[]>(`${this.apiUrl}/featured`, { params });
   }
 
-  toggleFavorite(propertyId: number): Observable<void> {
+  toggleFavorite(propertyId: number, currentUserId: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${propertyId}/favorite`, {});
+  }
+
+  searchProperties(
+    query: string,
+    checkIn?: Date,
+    checkOut?: Date,
+    guests?: number,
+    minPrice?: number,
+    maxPrice?: number,
+    propertyType?: PropertyType,
+    page = 0,
+    size = 20
+  ): Observable<{content: Property[], totalPages: number, totalElements: number}> {
+    let params = new HttpParams()
+      .set('query', query)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (checkIn) params = params.set('checkIn', checkIn.toISOString());
+    if (checkOut) params = params.set('checkOut', checkOut.toISOString());
+    if (guests) params = params.set('guests', guests.toString());
+    if (minPrice) params = params.set('minPrice', minPrice.toString());
+    if (maxPrice) params = params.set('maxPrice', maxPrice.toString());
+    if (propertyType) params = params.set('propertyType', propertyType);
+
+    return this.http.get<{content: Property[], totalPages: number, totalElements: number}>(`${this.apiUrl}/search`, { params });
   }
 
   getPropertyTypes(): PropertyType[] {

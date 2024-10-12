@@ -22,13 +22,14 @@ interface DecodedToken {
 export class AuthService {
   private currentUserSubject: BehaviorSubject<AuthResponse | null>;
   public currentUser$: Observable<AuthResponse | null>;
-  private readonly apiUrl = `${environment.apiUrl}/auth`;
+  private readonly apiUrl = `${environment.apiUrl}/v1/auth`;
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<AuthResponse | null>(this.getStoredUser());
     this.currentUser$ = this.currentUserSubject.asObservable();
   }
 
+  
   public login(loginRequest: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginRequest).pipe(
       tap(response => this.handleAuthenticationResponse(response)),

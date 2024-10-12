@@ -2,18 +2,27 @@
   <div class="container">
     <h2 class="section-title">Explore Property Types</h2>
     <div class="property-type-container">
-      <button class="nav-button prev" (click)="scrollLeft()">&lt;</button>
+      <button class="nav-button prev" (click)="scrollLeft()">
+        <span class="visually-hidden">Previous</span>
+        ←
+      </button>
       <div class="property-type-scroll" #scrollContainer>
         <div class="property-type-grid">
           <div *ngFor="let type of propertyTypes" class="property-type-card">
-            <div class="property-type-image" [style.background-image]="'url(' + propertyService.getPropertyTypeImageUrl(type) + ')'">
+            <div class="property-type-image-container">
+              <img [attr.data-src]="propertyService.getPropertyTypeImageUrl(type)" 
+                   alt="{{ propertyService.formatPropertyTypeName(type) }}"
+                   class="property-type-image lazy">
               <div class="property-type-overlay"></div>
             </div>
             <h3 class="property-type-name">{{ propertyService.formatPropertyTypeName(type) }}</h3>
           </div>
         </div>
       </div>
-      <button class="nav-button next" (click)="scrollRight()">&gt;</button>
+      <button class="nav-button next" (click)="scrollRight()">
+        <span class="visually-hidden">Next</span>
+        →
+      </button>
     </div>
   </div>
 </section>
