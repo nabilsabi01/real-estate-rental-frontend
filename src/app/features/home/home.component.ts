@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -35,20 +35,26 @@ import { FeaturedPropertiesComponent } from './featured-properties/featured-prop
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   isScrolled = false;
   currentSection = 'home';
+  showBackToTop = false;
 
   constructor(private messageService: MessageService) {}
+
+  ngOnInit() {
+    this.updateCurrentSection();
+  }
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     this.isScrolled = window.pageYOffset > 50;
+    this.showBackToTop = window.pageYOffset > 500;
     this.updateCurrentSection();
   }
 
   updateCurrentSection() {
-    const sections = ['home', 'property-types', 'featured-properties', 'about', 'testimonials'];
+    const sections = ['home', 'property-types', 'featured-properties', 'popular-destinations', 'about', 'testimonials'];
     for (const section of sections) {
       const element = document.getElementById(section);
       if (element) {
@@ -59,5 +65,9 @@ export class HomeComponent {
         }
       }
     }
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

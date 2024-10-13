@@ -2,18 +2,11 @@
   background-color: var(--background-light);
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-dark);
-  margin: 0;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
@@ -27,50 +20,43 @@
   background-color: var(--primary-color);
 }
 
-.properties-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 
-.error-message,
-.no-properties {
-  text-align: center;
-  padding: 2rem;
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.alert-danger {
+  background-color: var(--misty-rose);
+  border-color: var(--orange-soda);
+  color: var(--text-dark);
+}
+
+.bi-exclamation-triangle-fill {
+  color: var(--orange-soda);
+}
+
+.bi-info-circle-fill {
+  color: var(--primary-color);
 }
 
 @media (max-width: 768px) {
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   .section-title {
     font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .properties-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .section-title {
     font-size: 1.75rem;
-  }
-
-  .properties-grid {
-    grid-template-columns: 1fr;
   }
 }

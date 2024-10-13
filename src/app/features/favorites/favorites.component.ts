@@ -1,54 +1,55 @@
+// src/app/features/favorites/favorites.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+
 import { Property } from '../../core/models/property.model';
 import { AuthService } from '../../core/services/auth.service';
 import { FavoriteService } from '../../core/services/favorite.service';
-import { FooterComponent } from '../../shared/components/footer/footer.component';
 import { HeaderComponent } from '../../shared/components/header/header.component';
+import { FooterComponent } from '../../shared/components/footer/footer.component';
 import { PropertyCardComponent } from '../../shared/components/property-card/property-card.component';
+import { ToastNotificationsComponent } from '../../shared/components/toast-notifications/toast-notifications.component';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
   imports: [
     CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatProgressSpinnerModule,
     RouterModule,
+    MatPaginatorModule,
     HeaderComponent,
     FooterComponent,
-    PropertyCardComponent
+    PropertyCardComponent,
+    ToastNotificationsComponent
   ],
   templateUrl: './favorites.component.html',
   styleUrls: ['./favorites.component.css']
 })
 export class FavoritesComponent implements OnInit {
-  dataSource: MatTableDataSource<Property>;
+  favorites: Property[] = [];
   isLoading = true;
   error: string | null = null;
+  totalRecords = 0;
+  pageSize = 6;
+  pageSizeOptions = [6, 12, 18];
+  isScrolled = false;
+  currentSection = 'favorites';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(ToastNotificationsComponent) toastNotifications!: ToastNotificationsComponent;
 
   constructor(
     private favoriteService: FavoriteService,
     private authService: AuthService
-  ) {
-    this.dataSource = new MatTableDataSource<Property>([]);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadFavorites();
   }
 
-  loadFavorites(): void {
+  loadFavorites(page: number = 0): void {
     this.isLoading = true;
     this.error = null;
     const userId = this.authService.getCurrentUserId();
@@ -58,15 +59,13 @@ export class FavoritesComponent implements OnInit {
       return;
     }
 
-    this.favoriteService.getFavorites().subscribe({
+    this.favoriteService.getFavorites(page, this.pageSize).subscribe({
       next: (response) => {
-        const favorites = response.content.map(favorite => ({
+        this.favorites = response.content.map(favorite => ({
           ...favorite.property,
-          isFavorite: true
+          isFavorited: true
         }));
-        this.dataSource.data = favorites;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.totalRecords = response.totalElements;
         this.isLoading = false;
       },
       error: (error) => {
@@ -77,26 +76,21 @@ export class FavoritesComponent implements OnInit {
     });
   }
 
-  toggleFavorite(property: Property): void {
-    if (property.isFavorited) {
-      this.favoriteService.removeFavorite(property.id).subscribe({
-        next: () => {
-          this.dataSource.data = this.dataSource.data.filter(p => p.id !== property.id);
-        },
-        error: (error) => {
-          console.error('Error removing favorite:', error);
-        }
-      });
-    } else {
-      this.favoriteService.addFavorite(property.id).subscribe({
-        next: () => {
-          property.isFavorited = true;
-          this.dataSource.data = [...this.dataSource.data, property];
-        },
-        error: (error) => {
-          console.error('Error adding favorite:', error);
-        }
-      });
-    }
+  removeFavorite(property: Property): void {
+    this.favoriteService.removeFavorite(property.id).subscribe({
+      next: () => {
+        this.favorites = this.favorites.filter(p => p.id !== property.id);
+        this.totalRecords--;
+        this.toastNotifications.showToast('success', 'Favorites Updated', 'Removed from favorites');
+      },
+      error: (error) => {
+        console.error('Error removing favorite:', error);
+        this.toastNotifications.showToast('error', 'Error', 'Failed to remove property from favorites');
+      }
+    });
+  }
+
+  onPageChange(event: any): void {
+    this.loadFavorites(event.pageIndex);
   }
 }

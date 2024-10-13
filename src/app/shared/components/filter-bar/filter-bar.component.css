@@ -1,0 +1,29 @@
+.filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .apply-filters {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  @media (max-width: 991px) {
+    .filter-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .filter-group {
+      margin-bottom: 16px;
+    }
+  }

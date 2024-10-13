@@ -1,13 +1,7 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-interface SearchData {
-  destination: string;
-  checkIn: string;
-  checkOut: string;
-  guests: number;
-}
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-bar',
@@ -17,16 +11,26 @@ interface SearchData {
   styleUrls: ['./search-bar.component.css']
 })
 export class SearchBarComponent {
-  @Output() search = new EventEmitter<SearchData>();
-
-  searchData: SearchData = {
+  searchData = {
     destination: '',
     checkIn: '',
     checkOut: '',
     guests: 1
   };
 
+  constructor(private router: Router) {}
+
   onSearch() {
-    this.search.emit(this.searchData);
+    const formattedCheckIn = this.searchData.checkIn ? new Date(this.searchData.checkIn).toISOString() : null;
+    const formattedCheckOut = this.searchData.checkOut ? new Date(this.searchData.checkOut).toISOString() : null;
+
+    this.router.navigate(['/search-results'], {
+      queryParams: {
+        destination: this.searchData.destination,
+        checkIn: formattedCheckIn,
+        checkOut: formattedCheckOut,
+        guests: this.searchData.guests
+      }
+    });
   }
 }

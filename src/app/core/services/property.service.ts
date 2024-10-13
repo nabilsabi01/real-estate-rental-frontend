@@ -5,6 +5,12 @@ import { Property } from '../models/property.model';
 import { PropertyType } from '../models/property-type.enum';
 import { environment } from '../../../environments/environment';
 
+export interface SearchResponse {
+  content: Property[];
+  totalPages: number;
+  totalElements: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -85,34 +91,28 @@ export class PropertyService {
     return this.http.get<Property[]>(`${this.apiUrl}/featured`, { params });
   }
 
-  toggleFavorite(propertyId: number, currentUserId: number): Observable<void> {
+  toggleFavorite(propertyId: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${propertyId}/favorite`, {});
   }
 
   searchProperties(
-    query: string,
-    checkIn?: Date,
-    checkOut?: Date,
-    guests?: number,
-    minPrice?: number,
-    maxPrice?: number,
-    propertyType?: PropertyType,
-    page = 0,
-    size = 20
-  ): Observable<{content: Property[], totalPages: number, totalElements: number}> {
+    destination: string,
+    checkIn: string | null,
+    checkOut: string | null,
+    guests: number,
+    page: number = 0,
+    size: number = 20
+  ): Observable<any> {
     let params = new HttpParams()
-      .set('query', query)
+      .set('destination', destination)
       .set('page', page.toString())
-      .set('size', size.toString());
+      .set('size', size.toString())
+      .set('guests', guests.toString());
 
-    if (checkIn) params = params.set('checkIn', checkIn.toISOString());
-    if (checkOut) params = params.set('checkOut', checkOut.toISOString());
-    if (guests) params = params.set('guests', guests.toString());
-    if (minPrice) params = params.set('minPrice', minPrice.toString());
-    if (maxPrice) params = params.set('maxPrice', maxPrice.toString());
-    if (propertyType) params = params.set('propertyType', propertyType);
+    if (checkIn) params = params.set('checkIn', checkIn);
+    if (checkOut) params = params.set('checkOut', checkOut);
 
-    return this.http.get<{content: Property[], totalPages: number, totalElements: number}>(`${this.apiUrl}/search`, { params });
+    return this.http.get<any>(`${this.apiUrl}/search`, { params });
   }
 
   getPropertyTypes(): PropertyType[] {

@@ -1,0 +1,24 @@
+:host ::ng-deep .p-toast {
+    opacity: 0.9;
+  }
+  
+  :host ::ng-deep .p-toast-message {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  :host ::ng-deep .p-toast-message-success {
+    background-color: var(--alice-blue);
+    border-left: 6px solid var(--yellow-green);
+    color: var(--text-dark);
+  }
+  
+  :host ::ng-deep .p-toast-message-error {
+    background-color: var(--misty-rose);
+    border-left: 6px solid var(--orange-soda);
+    color: var(--text-dark);
+  }
+  
+  :host ::ng-deep .p-toast-icon-close {
+    color: var(--text-muted);
+  }

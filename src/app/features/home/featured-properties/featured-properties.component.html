@@ -1,33 +1,40 @@
 <section class="featured-properties py-5">
   <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Featured Properties</h2>
-      <button pButton pRipple type="button" label="View All Properties" 
-              icon="pi pi-list" iconPos="left" 
-              class="p-button-raised p-button-rounded"
-              [routerLink]="['/properties']">
-      </button>
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <h2 class="section-title">Featured Properties</h2>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a routerLink="/properties" class="btn btn-outline-primary">View All Properties</a>
+      </div>
     </div>
 
-    <div *ngIf="isLoading" class="loading-spinner">
-      <p-progressSpinner></p-progressSpinner>
+    <div *ngIf="isLoading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
 
-    <div *ngIf="error" class="error-message">
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
       {{ error }}
     </div>
 
-    <div *ngIf="!isLoading && !error" class="properties-grid">
-      <app-property-card
-        *ngFor="let property of featuredProperties"
-        [property]="property"
-        [isFavorite]="property.isFavorited"
-        (favoriteToggle)="toggleFavorite($event)"
-      ></app-property-card>
+    <div *ngIf="!isLoading && !error" class="row">
+      <div *ngFor="let property of featuredProperties" class="col-sm-6 col-md-4 col-lg-3 mb-4">
+        <app-property-card
+          [property]="property"
+          [isFavorite]="property.isFavorited"
+          (favoriteToggle)="toggleFavorite(property)"
+        ></app-property-card>
+      </div>
     </div>
 
-    <div *ngIf="!isLoading && !error && featuredProperties.length === 0" class="no-properties">
-      <p>No featured properties available at the moment.</p>
+    <div *ngIf="!isLoading && !error && featuredProperties.length === 0" class="text-center my-5">
+      <i class="bi bi-info-circle-fill text-primary fs-1 mb-3"></i>
+      <p class="lead">No featured properties available at the moment.</p>
     </div>
   </div>
 </section>
+
+<app-toast-notifications></app-toast-notifications>

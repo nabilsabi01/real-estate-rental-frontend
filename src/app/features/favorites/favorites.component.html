@@ -1,32 +1,50 @@
-<app-header></app-header>
+<!-- src/app/features/favorites/favorites.component.html -->
+<app-header [isScrolled]="isScrolled" [currentSection]="currentSection"></app-header>
 
-<div class="favorites-container">
-  <h2 class="section-title">Your Favorites</h2>
+<main class="favorites-section">
+  <div class="container">
+    <h1 class="section-title">Your Favorites</h1>
 
-  <div *ngIf="isLoading" class="loading-spinner">
-    <mat-spinner></mat-spinner>
-  </div>
-
-  <div *ngIf="error" class="error-message">
-    {{ error }}
-  </div>
-
-  <div *ngIf="!isLoading && !error" class="favorites-content">
-    <div class="favorites-grid">
-      <app-property-card
-        *ngFor="let property of dataSource.data"
-        [property]="property"
-        [isFavorite]="property.isFavorited"
-        (toggleFavorite)="toggleFavorite(property)"
-      ></app-property-card>
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
 
-    <mat-paginator [pageSizeOptions]="[6, 12, 24]" showFirstLastButtons></mat-paginator>
-  </div>
+    <div *ngIf="error" class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ error }}
+    </div>
 
-  <div *ngIf="!isLoading && !error && dataSource.data.length === 0" class="no-favorites">
-    <p>You haven't added any properties to your favorites yet.</p>
+    <div *ngIf="!isLoading && !error" class="favorites-content">
+      <div class="row">
+        <div *ngFor="let property of favorites" class="col-sm-6 col-md-4 col-lg-4 mb-4">
+          <app-property-card
+            [property]="property"
+            [isFavorite]="true"
+            (favoriteToggle)="removeFavorite($event)"
+          ></app-property-card>
+        </div>
+      </div>
+
+      <mat-paginator 
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        class="custom-paginator"
+        *ngIf="totalRecords > pageSize"
+      ></mat-paginator>
+    </div>
+
+    <div *ngIf="!isLoading && !error && favorites.length === 0" class="no-favorites">
+      <i class="bi bi-heart-fill"></i>
+      <p>You haven't added any properties to your favorites yet.</p>
+      <a routerLink="/properties" class="btn btn-primary">Explore Properties</a>
+    </div>
   </div>
-</div>
+</main>
 
 <app-footer></app-footer>
+
+<app-toast-notifications></app-toast-notifications>

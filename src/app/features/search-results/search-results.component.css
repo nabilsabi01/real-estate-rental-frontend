@@ -1,0 +1,43 @@
+.search-results {
+  padding-top: 80px;
+  background-color: var(--background-light);
+}
+
+.filter-sidebar {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.property-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.property-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-item img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.loading, .error {
+  text-align: center;
+  margin-top: 20px;
+}
+
+mat-paginator {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .filter-sidebar {
+    margin-bottom: 20px;
+  }
+}

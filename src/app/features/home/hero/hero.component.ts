@@ -11,9 +11,4 @@ import { SearchBarComponent } from '../../../shared/components/search-bar/search
 })
 export class HeroComponent {
   heroBackgroundImage = 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80';
-
-  onSearch(searchData: any) {
-    console.log('Search data:', searchData);
-    // Implement search logic here
-  }
 }

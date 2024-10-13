@@ -1,1 +1,24 @@
-<p>filter-bar works!</p>
+<div class="filter-bar">
+    <div class="filter-group">
+      <label for="price-range">Price Range</label>
+      <input type="range" id="price-range" [(ngModel)]="filters.priceRange[1]" min="0" max="1000" step="10">
+      <span>${{filters.priceRange[0]}} - ${{filters.priceRange[1]}}</span>
+    </div>
+    <div class="filter-group">
+      <label for="property-type">Property Type</label>
+      <select id="property-type" [(ngModel)]="filters.propertyType">
+        <option value="">All Types</option>
+        <option value="apartment">Apartment</option>
+        <option value="house">House</option>
+        <option value="villa">Villa</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Amenities</label>
+      <div *ngFor="let amenity of ['Wi-Fi', 'Pool', 'Parking', 'Air Conditioning']">
+        <input type="checkbox" [id]="amenity" [(ngModel)]="filters.amenities">
+        <label [for]="amenity">{{amenity}}</label>
+      </div>
+    </div>
+    <button (click)="applyFilters()" class="apply-filters">Apply Filters</button>
+  </div>

@@ -1,21 +1,12 @@
-.component-spacer {
-  height: 4rem;
+:host {
+  display: block;
+  overflow-x: hidden;
 }
 
-.section {
-  padding: 4rem 0;
+main {
+  overflow-x: hidden;
 }
 
-.section-light {
-  background-color: var(--background-light);
-}
-
-.section-dark {
-  background-color: var(--background-dark);
-  color: var(--text-light);
-}
-
-/* Enhanced button styles */
 :host ::ng-deep .p-button {
   background-color: var(--primary-blue);
   border-color: var(--primary-blue);
@@ -29,63 +20,39 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Custom toast styles */
-:host ::ng-deep .p-toast {
-  opacity: 0.9;
-}
-
-:host ::ng-deep .p-toast .p-toast-message {
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-:host ::ng-deep .p-toast .p-toast-message-content {
-  padding: 1rem;
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  z-index: 1000;
 }
 
-:host ::ng-deep .p-toast .p-toast-message-icon {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-}
-
-:host ::ng-deep .p-toast .p-toast-message-text {
-  flex-grow: 1;
-}
-
-:host ::ng-deep .p-toast .p-toast-summary {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-:host ::ng-deep .p-toast .p-toast-detail {
-  font-size: 0.9rem;
-}
-
-:host ::ng-deep .p-toast .p-toast-message-success {
-  border-left: 4px solid var(--yellow-green);
-}
-
-:host ::ng-deep .p-toast .p-toast-message-success .p-toast-message-icon {
-  color: var(--yellow-green);
-}
-
-:host ::ng-deep .p-toast .p-toast-message-error {
-  border-left: 4px solid var(--orange-soda);
-}
-
-:host ::ng-deep .p-toast .p-toast-message-error .p-toast-message-icon {
-  color: var(--orange-soda);
+.back-to-top:hover {
+  opacity: 1;
+  transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 2rem 0;
+    padding: 3rem 0;
   }
 
-  .component-spacer {
-    height: 2rem;
+  .back-to-top {
+    width: 35px;
+    height: 35px;
+    bottom: 15px;
+    right: 15px;
   }
 }

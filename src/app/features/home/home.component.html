@@ -1,17 +1,33 @@
-<main role="main">
-  <app-header [isScrolled]="isScrolled" [currentSection]="currentSection"></app-header>
+<app-header [isScrolled]="isScrolled" [currentSection]="currentSection"></app-header>
+
+<main>
   <app-hero id="home"></app-hero>
-  <div class="component-spacer"></div>
-  <app-property-types id="property-types" class="section section-light"></app-property-types>
-  <div class="component-spacer"></div>
-  <app-featured-properties id="featured-properties" class="section section-dark"></app-featured-properties>
-  <div class="component-spacer"></div>
-  <app-about id="about" class="section section-light"></app-about>
-  <div class="component-spacer"></div>
-  <app-testimonials id="testimonials" class="section section-dark"></app-testimonials>
-  <div class="component-spacer"></div>
-  <app-popular-destinations class="section section-light"></app-popular-destinations>
-  <app-footer></app-footer>
+
+  <section id="property-types" class="section">
+    <app-property-types></app-property-types>
+  </section>
+
+ <section id="popular-destinations" class="section">
+    <app-popular-destinations></app-popular-destinations>
+  </section>
+
+  <section id="featured-properties" class="section">
+    <app-featured-properties></app-featured-properties>
+  </section>
+ 
+  <section id="about" class="section">
+    <app-about></app-about>
+  </section>
+
+  <section id="testimonials" class="section">
+    <app-testimonials></app-testimonials>
+  </section>
 </main>
 
-<p-toast position="bottom-right"></p-toast>
+<app-footer></app-footer>
+
+<button *ngIf="showBackToTop" class="back-to-top" (click)="scrollToTop()" pRipple>
+  <i class="pi pi-chevron-up"></i>
+</button>
+
+<p-toast></p-toast>

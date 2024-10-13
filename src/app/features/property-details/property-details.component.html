@@ -1,0 +1,120 @@
+<div class="property-details" *ngIf="!isLoading && !error && property">
+  <header class="page-header">
+    <h1 class="property-title">{{ property.title }}</h1>
+    <div class="property-meta">
+      <div class="property-rating">
+        <img src="assets/icons/star.svg" alt="Star icon" class="rating-icon">
+        <span class="rating-value">{{ property.averageRating?.toFixed(1) }}</span>
+        <a href="#reviews" class="review-count">{{ property.totalReviews }} reviews</a>
+      </div>
+      <div class="host-status" *ngIf="property.host.superHost">
+        <img src="assets/icons/superhost.svg" alt="Superhost icon" class="superhost-icon">
+        <span class="superhost-label">Superhost</span>
+      </div>
+      <a href="#location" class="property-location">{{ property.location.city }}, {{ property.location.country }}</a>
+    </div>
+    <div class="action-buttons">
+      <button class="share-button" (click)="onShare()">
+        <img src="assets/icons/share.svg" alt="Share icon" class="share-icon">
+        Share
+      </button>
+      <button class="save-button" (click)="toggleFavorite()">
+        <img [src]="property.isFavorited ? 'assets/icons/heart-filled.svg' : 'assets/icons/heart.svg'" alt="Save icon" class="save-icon">
+        {{ property.isFavorited ? 'Saved' : 'Save' }}
+      </button>
+    </div>
+  </header>
+
+  <section class="property-gallery">
+    <img [src]="property.photos[0].photoUrl" alt="Main property image" class="main-image">
+    <div class="gallery-grid">
+      <img *ngFor="let photo of property.photos.slice(1, 5)" [src]="photo.photoUrl" alt="Property image" class="gallery-image">
+      <div class="gallery-overlay" *ngIf="property.photos.length > 5">
+        <button class="show-all-photos">
+          <img src="assets/icons/photos.svg" alt="Photos icon" class="photos-icon">
+          Show all photos
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="content-wrapper">
+    <section class="property-details-content">
+      <div class="content-header">
+        <div class="host-info">
+          <h2 class="property-type">{{ property.propertyType }} hosted by {{ property.host.firstName }}</h2>
+          <ul class="property-features">
+            <li>{{ property.maxGuests }} guests</li>
+            <li>{{ property.bedrooms }} bedrooms</li>
+            <li>{{ property.beds }} beds</li>
+            <li>{{ property.bathrooms }} baths</li>
+          </ul>
+        </div>
+        <img [src]="property.host.profilePictureUrl" alt="Host profile picture" class="host-image">
+      </div>
+      <hr class="content-divider">
+      <p class="property-description">{{ property.description }}</p>
+      <button class="show-more-button">
+        Show more
+        <img src="assets/icons/chevron-down.svg" alt="Show more icon" class="show-more-icon">
+      </button>
+      <section class="amenities-section">
+        <h2 class="section-title">What this place offers</h2>
+        <div class="amenities-grid">
+          <div class="amenity-item" *ngFor="let amenity of property.amenities.slice(0, 10)">
+            <img [src]="amenity.icon" [alt]="amenity.name + ' icon'" class="amenity-icon">
+            <span class="amenity-name">{{ amenity.name }}</span>
+          </div>
+        </div>
+        <button class="show-all-amenities" *ngIf="property.amenities.length > 10">Show all {{ property.amenities.length }} amenities</button>
+      </section>
+    </section>
+
+    <aside class="booking-sidebar">
+      <div class="booking-card">
+        <div class="booking-header">
+          <div class="price-info">
+            <span class="price-value">${{ property.pricePerNight }}</span>
+            <span class="price-period">/ night</span>
+          </div>
+          <div class="rating-info">
+            <img src="assets/icons/star.svg" alt="Star icon" class="rating-icon">
+            <span class="rating-value">{{ property.averageRating?.toFixed(1) }}</span>
+            <a href="#reviews" class="review-count">{{ property.totalReviews }} reviews</a>
+          </div>
+        </div>
+        <form class="booking-form">
+          <div class="date-inputs">
+            <div class="input-group">
+              <label for="check-in">CHECK-IN</label>
+              <input type="date" id="check-in" name="check-in">
+            </div>
+            <div class="input-group">
+              <label for="check-out">CHECKOUT</label>
+              <input type="date" id="check-out" name="check-out">
+            </div>
+          </div>
+          <div class="guests-input">
+            <label for="guests">GUESTS</label>
+            <select id="guests" name="guests">
+              <option value="1">1 guest</option>
+              <option value="2" selected>2 guests</option>
+              <!-- Add more options up to max guests -->
+            </select>
+          </div>
+          <button class="reserve-button" (click)="onReserve()">Reserve</button>
+        </form>
+        <hr class="booking-divider">
+        <div class="total-price">
+          <span>Total</span>
+          <span>${{ totalPrice || 'N/A' }}</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Add more sections (reviews, location, etc.) similarly -->
+</div>
+
+<div *ngIf="isLoading" class="loading">Loading property details...</div>
+<div *ngIf="error" class="error">{{ error }}</div>

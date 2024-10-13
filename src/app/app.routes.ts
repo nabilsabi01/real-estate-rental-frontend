@@ -16,7 +16,6 @@ export const routes: Routes = [
         path: 'signup',
         loadComponent: () => import('./features/auth/signup/signup.component').then(m => m.SignupComponent)
       }
-
     ]
   },
   {
@@ -27,9 +26,13 @@ export const routes: Routes = [
     path: 'favorites',
     loadComponent: () => import('./features/favorites/favorites.component').then(m => m.FavoritesComponent)
   },
-  // {
-  //   path: 'property/:id',
-  //   loadComponent: () => import('./features/property-details/property-details.component').then(m => m.P)
-  // },
-  { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+  {
+    path: 'property/:id',
+    loadComponent: () => import('./features/property-details/property-details.component').then(m => m.PropertyDetailsComponent)
+  },
+  {
+    path: 'search-results',
+    loadComponent: () => import('./features/search-results/search-results.component').then(m => m.SearchResultsComponent)
+  },
+  { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
