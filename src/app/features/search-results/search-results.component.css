@@ -3,41 +3,233 @@
   background-color: var(--background-light);
 }
 
-.filter-sidebar {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 5px;
-}
-
-.filter-section {
-  margin-bottom: 20px;
+.search-sidebar {
+  position: sticky;
+  top: 100px;
 }
 
 .property-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: var(--card-bg);
+  border-radius: 8px;
 }
 
 .property-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.carousel-item img {
-  height: 200px;
+.property-image {
+  width: 100%;
+  height: 250px;
   object-fit: cover;
 }
 
-.loading, .error {
-  text-align: center;
-  margin-top: 20px;
+.property-type {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--accent-color);
+  color: var(--text-light);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.photo-navigation {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.photo-navigation button {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.photo-navigation button:hover {
+  opacity: 1;
+}
+
+.property-details {
+  padding: 1.5rem;
+}
+
+.property-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.location {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.location i {
+  color: var(--primary-color);
+  margin-right: 5px;
+}
+
+.property-features {
+  display: flex;
+  justify-content: start;
+  gap: 15px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.property-features span {
+  display: flex;
+  align-items: center;
+}
+
+.property-features i {
+  margin-right: 5px;
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+.rating-container {
+  margin-bottom: 0.5rem;
+}
+
+.stars {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+}
+
+.rating-text {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+.amenities {
+  margin-bottom: 1rem;
+}
+
+.amenity-badge {
+  background-color: var(--background-light);
+  color: var(--text-dark);
+  padding: 3px 8px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.price small {
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: var(--text-muted);
+}
+
+.favorite-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
 }
 
 mat-paginator {
-  margin-top: 20px;
+  margin-top: 2rem;
+  background-color: var(--card-bg);
 }
 
-@media (max-width: 768px) {
-  .filter-sidebar {
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+@media (max-width: 991.98px) {
+  .search-sidebar {
+    position: static;
     margin-bottom: 20px;
+  }
+
+  .property-image {
+    height: 200px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .property-details {
+    padding: 1rem;
+  }
+
+  .property-card .row {
+    flex-direction: column;
+  }
+
+  .property-card .col-md-4,
+  .property-card .col-md-8 {
+    width: 100%;
+  }
+
+  .property-image {
+    height: 250px;
+  }
+
+  .property-features {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .property-image {
+    height: 200px;
+  }
+
+  .amenity-badge {
+    font-size: 0.7rem;
+  }
+
+  .price {
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    font-size: 0.875rem;
   }
 }

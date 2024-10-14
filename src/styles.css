@@ -22,7 +22,6 @@
   --black: hsl(0, 0%, 0%);
   --opal: hsl(180, 20%, 62%);
 
-  /* Semantic color assignments */
   --primary-color: var(--yellow-green);
   --secondary-color: var(--orange-soda);
   --background-light: var(--cultured-2);

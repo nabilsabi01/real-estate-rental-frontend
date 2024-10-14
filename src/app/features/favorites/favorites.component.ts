@@ -34,7 +34,7 @@ export class FavoritesComponent implements OnInit {
   totalRecords = 0;
   pageSize = 6;
   pageSizeOptions = [6, 12, 18];
-  isScrolled = false;
+  isScrolled = true;
   currentSection = 'favorites';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -1,70 +1,65 @@
-<app-header [isScrolled]="isScrolled" [currentSection]="currentSection"></app-header>
+<app-header [isScrolled]="true" currentSection="search-results"></app-header>
 
-<main class="search-results container-fluid" role="main">
+<div class="search-results container-fluid">
   <div class="row">
-    <div class="col-md-3">
-      <div class="filter-sidebar">
-        <h3>Filters</h3>
-        <div class="filter-section">
-          <h4>Price Range</h4>
-          <input type="range" class="form-range" [(ngModel)]="priceRange[1]" min="0" max="1000" step="10">
-          <p>${{priceRange[0]}} - ${{priceRange[1]}}</p>
-        </div>
-        <div class="filter-section">
-          <h4>Property Type</h4>
-          <div *ngFor="let type of propertyTypes" class="form-check">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="selectedPropertyTypes" [id]="type">
-            <label class="form-check-label" [for]="type">{{type}}</label>
-          </div>
-        </div>
-        <div class="filter-section">
-          <h4>Amenities</h4>
-          <div *ngFor="let amenity of amenities" class="form-check">
-            <input class="form-check-input" type="checkbox" [(ngModel)]="selectedAmenities" [id]="amenity">
-            <label class="form-check-label" [for]="amenity">{{amenity}}</label>
-          </div>
-        </div>
-        <button class="btn btn-primary w-100" (click)="applyFilters()">Apply Filters</button>
+    <div class="col-lg-3 mb-4">
+      <div class="search-sidebar">
+        <app-search-bar></app-search-bar>
       </div>
     </div>
-    <div class="col-md-9">
-      <app-search-bar></app-search-bar>
-      
-      <div *ngIf="loading" class="loading">Loading...</div>
-      
-      <div *ngIf="error" class="error alert alert-danger">{{ error }}</div>
-      
-      <div class="property-list" *ngIf="!loading && !error">
-        <div class="property-card card mb-3" *ngFor="let property of properties">
+    <div class="col-lg-9">
+      <div *ngIf="loading" class="loading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!loading && !error" class="property-list">
+        <div *ngFor="let property of properties" class="property-card mb-4">
           <div class="row g-0">
-            <div class="col-md-4">
-              <div id="property{{property.id}}Carousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                  <div class="carousel-item" *ngFor="let photo of property.photos; let i = index" [class.active]="i === 0">
-                    <img [src]="photo.photoUrl" class="d-block w-100" [alt]="property.title">
-                  </div>
-                </div>
-                <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#property' + property.id + 'Carousel'" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
+            <div class="col-md-4 position-relative">
+              <img [src]="property.photos[currentPhotoIndices[property.id]].photoUrl" 
+                   [alt]="property.title" class="img-fluid rounded-start property-image">
+              <span class="property-type badge">{{ property.propertyType }}</span>
+              <div class="photo-navigation">
+                <button class="btn btn-sm btn-light" (click)="prevPhoto(property.id)" [disabled]="currentPhotoIndices[property.id] === 0">
+                  <i class="bi bi-chevron-left"></i>
                 </button>
-                <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#property' + property.id + 'Carousel'" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
+                <button class="btn btn-sm btn-light" (click)="nextPhoto(property.id)" [disabled]="currentPhotoIndices[property.id] === property.photos.length - 1">
+                  <i class="bi bi-chevron-right"></i>
                 </button>
               </div>
             </div>
             <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">{{ property.title }}</h5>
-                <p class="card-text">{{ property.location.city }}, {{ property.location.country }}</p>
-                <p class="card-text"><small class="text-muted">{{ property.pricePerNight | currency }} per night</small></p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <button class="btn btn-primary">View Details</button>
-                  <button class="btn btn-outline-primary" (click)="toggleFavorite(property)">
-                    <i class="bi" [ngClass]="property.isFavorited ? 'bi-heart-fill' : 'bi-heart'"></i>
-                    {{ property.isFavorited ? 'Favorited' : 'Add to Favorites' }}
+              <div class="property-details">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h5 class="property-title">{{ property.title }}</h5>
+                  <button class="btn btn-sm btn-outline-primary favorite-btn" (click)="toggleFavorite(property)">
+                    <i class="bi" [ngClass]="{'bi-heart': !property.isFavorited, 'bi-heart-fill': property.isFavorited}"></i>
                   </button>
+                </div>
+                <p class="location"><i class="bi bi-geo-alt-fill"></i> {{ property.location.city }}, {{ property.location.country }}</p>
+                <div class="property-features">
+                  <span><i class="bi bi-house-door"></i> {{ property.bedrooms }} bedrooms</span>
+                  <span><i class="bi bi-person"></i> {{ property.beds }} beds</span>
+                  <span><i class="bi bi-water"></i> {{ property.bathrooms }} bathrooms</span>
+                </div>
+                <div class="rating-container">
+                  <span class="stars">
+                    <i class="bi bi-star-fill" *ngFor="let star of [1,2,3,4,5]"></i>
+                  </span>
+                  <span class="rating-text">{{ property.averageRating | number:'1.1-1' }} ({{ property.totalReviews }} reviews)</span>
+                </div>
+                <p class="amenities" *ngIf="property.amenities && property.amenities.length > 0">
+                  <span *ngFor="let amenity of property.amenities.slice(0, 3)" class="amenity-badge">{{ amenity.name }}</span>
+                </p>
+                <div class="mt-auto d-flex justify-content-between align-items-center">
+                  <p class="price mb-0">{{ property.pricePerNight | currency }} <small>per night</small></p>
+                  <button class="btn btn-primary" (click)="viewDetails(property.id)">View Details</button>
                 </div>
               </div>
             </div>
@@ -72,15 +67,14 @@
         </div>
       </div>
 
-      <mat-paginator 
-        [length]="totalElements"
-        [pageSize]="pageSize"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        (page)="onPageChange($event)"
-        aria-label="Select page">
+      <mat-paginator [length]="totalElements"
+                     [pageSize]="pageSize"
+                     [pageSizeOptions]="[5, 10, 25, 100]"
+                     (page)="onPageChange($event)"
+                     *ngIf="totalElements > 0">
       </mat-paginator>
     </div>
   </div>
-</main>
+</div>
 
 <app-footer></app-footer>

@@ -27,7 +27,7 @@ keyFeatures: any;
   favorites: Favorite[];
   createdAt: Date;
   updatedAt: Date;
-  averageRating?: number;
+  averageRating: number;
   totalReviews?: number;
   isFavorited?: boolean;
 }
