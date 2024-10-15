@@ -1,23 +1,29 @@
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { UserRole } from '../models/user-role.enum';
+import { map, take } from 'rxjs/operators';
 
-export const roleGuard = (allowedRoles: UserRole[]): CanActivateFn => {
-  return (_, state) => {
-    const authService = inject(AuthService);
-    const router = inject(Router);
+export const roleGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-    const userRole = authService.getUserRole();
+  return authService.currentUser$.pipe(
+    take(1),
+    map(() => {
+      if (!authService.isLoggedIn()) {
+        router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
+        return false;
+      }
 
-    if (authService.isLoggedIn() && userRole && allowedRoles.includes(userRole)) {
-      return true;
-    }
+      const expectedRole = route.data['expectedRole'];
+      const userRole = authService.getUserRole();
 
-    if (!authService.isLoggedIn()) {
-      return router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url }});
-    } else {
-      return router.navigate(['/auth/login']);
-    }
-  };
+      if (userRole === expectedRole) {
+        return true;
+      }
+
+      router.navigate(['/unauthorized']);
+      return false;
+    })
+  );
 };

@@ -1,4 +1,11 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .search-results {
+  flex: 1;
   padding-top: 80px;
   background-color: var(--background-light);
 }
@@ -51,10 +58,17 @@
 .photo-navigation button {
   opacity: 0.7;
   transition: opacity 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: var(--text-dark);
 }
 
 .photo-navigation button:hover {
   opacity: 1;
+}
+
+.photo-navigation button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .property-details {
@@ -148,6 +162,10 @@
   border-radius: 0.2rem;
 }
 
+.favorite-btn i {
+  font-size: 1rem;
+}
+
 .loading {
   display: flex;
   justify-content: center;
@@ -179,6 +197,20 @@ mat-paginator {
 .btn-outline-primary:hover {
   background-color: var(--primary-color);
   color: var(--text-light);
+}
+
+/* Header Styles */
+app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/* Search Bar Styles */
+app-search-bar {
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 991.98px) {

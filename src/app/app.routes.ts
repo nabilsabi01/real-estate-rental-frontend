@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import {  authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -24,7 +26,9 @@ export const routes: Routes = [
   },
   {
     path: 'favorites',
-    loadComponent: () => import('./features/favorites/favorites.component').then(m => m.FavoritesComponent)
+    loadComponent: () => import('./features/favorites/favorites.component').then(m => m.FavoritesComponent),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRole: 'GUEST' }
   },
   {
     path: 'property/:id',
@@ -33,6 +37,12 @@ export const routes: Routes = [
   {
     path: 'search-results',
     loadComponent: () => import('./features/search-results/search-results.component').then(m => m.SearchResultsComponent)
+  },
+  {
+    path: 'add-property',
+    loadComponent: () => import('./features/property/property-form/property-form.component').then(m => m.PropertyFormComponent),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRole: 'HOST' }
   },
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

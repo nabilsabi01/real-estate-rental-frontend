@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Property } from '../models/property.model';
 import { PropertyType } from '../models/property-type.enum';
@@ -23,10 +23,10 @@ export class PropertyService {
     [PropertyType.VILLA]: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&w=500&q=60',
     [PropertyType.COTTAGE]: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&w=500&q=60',
     [PropertyType.CHALET]: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&w=500&q=60',
-    [PropertyType.BUNGALOW]: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&w=500&q=60', // Updated Bungalow URL
+    [PropertyType.BUNGALOW]: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&w=500&q=60',
     [PropertyType.CABIN]: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&w=500&q=60',
     [PropertyType.STUDIO]: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&w=500&q=60',
-    [PropertyType.CONDO]: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&w=500&q=60', // Updated Condo URL
+    [PropertyType.CONDO]: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&w=500&q=60',
     [PropertyType.PENTHOUSE]: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&w=500&q=60',
     [PropertyType.LOFT]: 'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&w=500&q=60',
     [PropertyType.FARMHOUSE]: 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&w=500&q=60',
@@ -41,54 +41,41 @@ export class PropertyService {
 
   constructor(private http: HttpClient) {}
 
-  createProperty(property: Partial<Property>, photos: File[]): Observable<Property> {
+  createProperty(propertyData: any, photos: File[]): Observable<Property> {
     const formData = new FormData();
-    formData.append('property', JSON.stringify(property));
+    formData.append('property', new Blob([JSON.stringify(propertyData)], { type: 'application/json' }));
+    
     photos.forEach((photo, index) => {
-      formData.append(`photos`, photo, photo.name);
+      formData.append('photos', photo, photo.name);
     });
+
     return this.http.post<Property>(this.apiUrl, formData);
   }
 
-  getPropertyById(id: number, guestId?: number): Observable<Property> {
-    let params = new HttpParams();
-    if (guestId) {
-      params = params.set('guestId', guestId.toString());
-    }
-    return this.http.get<Property>(`${this.apiUrl}/${id}`, { params });
+  updateProperty(id: number, propertyData: any, photos: File[]): Observable<Property> {
+    const formData = new FormData();
+    formData.append('property', new Blob([JSON.stringify(propertyData)], { type: 'application/json' }));
+    photos.forEach(photo => formData.append('photos', photo, photo.name));
+    return this.http.put<Property>(`${this.apiUrl}/${id}`, formData);
   }
 
-  getAllProperties(page = 0, size = 20, guestId?: number): Observable<{content: Property[], totalPages: number, totalElements: number}> {
-    let params = new HttpParams()
+  getPropertyById(id: number): Observable<Property> {
+    return this.http.get<Property>(`${this.apiUrl}/${id}`);
+  }
+
+  getAllProperties(page = 0, size = 20): Observable<SearchResponse> {
+    const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
-    if (guestId) {
-      params = params.set('guestId', guestId.toString());
-    }
-    return this.http.get<{content: Property[], totalPages: number, totalElements: number}>(this.apiUrl, { params });
-  }
-
-  updateProperty(id: number, property: Partial<Property>, photos?: File[]): Observable<Property> {
-    const formData = new FormData();
-    formData.append('property', JSON.stringify(property));
-    if (photos) {
-      photos.forEach((photo, index) => {
-        formData.append(`photos`, photo, photo.name);
-      });
-    }
-    return this.http.put<Property>(`${this.apiUrl}/${id}`, formData);
+    return this.http.get<SearchResponse>(this.apiUrl, { params });
   }
 
   deleteProperty(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getFeaturedProperties(guestId?: number): Observable<Property[]> {
-    let params = new HttpParams();
-    if (guestId) {
-      params = params.set('guestId', guestId.toString());
-    }
-    return this.http.get<Property[]>(`${this.apiUrl}/featured`, { params });
+  getFeaturedProperties(): Observable<Property[]> {
+    return this.http.get<Property[]>(`${this.apiUrl}/featured`);
   }
 
   toggleFavorite(propertyId: number): Observable<void> {
@@ -102,7 +89,7 @@ export class PropertyService {
     guests: number,
     page: number = 0,
     size: number = 20
-  ): Observable<any> {
+  ): Observable<SearchResponse> {
     let params = new HttpParams()
       .set('destination', destination)
       .set('page', page.toString())
@@ -112,7 +99,7 @@ export class PropertyService {
     if (checkIn) params = params.set('checkIn', checkIn);
     if (checkOut) params = params.set('checkOut', checkOut);
 
-    return this.http.get<any>(`${this.apiUrl}/search`, { params });
+    return this.http.get<SearchResponse>(`${this.apiUrl}/search`, { params });
   }
 
   getPropertyTypes(): PropertyType[] {
@@ -120,7 +107,7 @@ export class PropertyService {
   }
 
   getPropertyTypeImageUrl(type: PropertyType): string {
-    return this.propertyTypeImages[type] || 'assets/images/property-types/default.jpg';
+    return this.propertyTypeImages[type];
   }
 
   formatPropertyTypeName(type: PropertyType): string {

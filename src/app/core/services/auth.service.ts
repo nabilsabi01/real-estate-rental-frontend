@@ -29,7 +29,7 @@ export class AuthService {
     this.currentUser$ = this.currentUserSubject.asObservable();
   }
 
-  
+
   public login(loginRequest: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginRequest).pipe(
       tap(response => this.handleAuthenticationResponse(response)),
@@ -65,8 +65,9 @@ export class AuthService {
     return decodedToken ? decodedToken.userId : null;
   }
 
-  public getUserRole(): UserRole | null {
-    return this.currentUserSubject.value?.userRole ?? null;
+  getUserRole(): UserRole | null {
+    const currentUser = this.currentUserSubject.value;
+    return currentUser ? currentUser.userRole : null;
   }
 
   public getToken(): string | null {

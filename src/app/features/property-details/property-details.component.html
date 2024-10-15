@@ -4,7 +4,7 @@
     <div class="property-meta">
       <div class="property-rating">
         <img src="assets/icons/star.svg" alt="Star icon" class="rating-icon">
-        <span class="rating-value">{{ property.averageRating?.toFixed(1) }}</span>
+        <span class="rating-value">{{ property.averageRating.toFixed(1) }}</span>
         <a href="#reviews" class="review-count">{{ property.totalReviews }} reviews</a>
       </div>
       <div class="host-status" *ngIf="property.host.superHost">
@@ -79,7 +79,7 @@
           </div>
           <div class="rating-info">
             <img src="assets/icons/star.svg" alt="Star icon" class="rating-icon">
-            <span class="rating-value">{{ property.averageRating?.toFixed(1) }}</span>
+            <span class="rating-value">{{ property.averageRating.toFixed(1) }}</span>
             <a href="#reviews" class="review-count">{{ property.totalReviews }} reviews</a>
           </div>
         </div>
@@ -99,7 +99,6 @@
             <select id="guests" name="guests">
               <option value="1">1 guest</option>
               <option value="2" selected>2 guests</option>
-              <!-- Add more options up to max guests -->
             </select>
           </div>
           <button class="reserve-button" (click)="onReserve()">Reserve</button>
@@ -112,8 +111,6 @@
       </div>
     </aside>
   </div>
-
-  <!-- Add more sections (reviews, location, etc.) similarly -->
 </div>
 
 <div *ngIf="isLoading" class="loading">Loading property details...</div>

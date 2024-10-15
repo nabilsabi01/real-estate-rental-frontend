@@ -30,9 +30,16 @@ header.scrolled {
   text-decoration: none;
 }
 
+nav {
+  display: flex;
+  align-items: center;
+}
+
 .nav-links {
   display: flex;
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links li:not(:last-child) {
@@ -63,6 +70,7 @@ header.scrolled {
   text-decoration: none;
   border-radius: 4px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .btn-secondary {
@@ -87,8 +95,62 @@ header.scrolled {
   color: var(--primary-color);
 }
 
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-menu-toggle .bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  background-color: var(--text-light);
+  transition: all 0.3s ease-in-out;
+}
+
 @media (max-width: 768px) {
-  .nav-links, .auth-buttons {
-    display: none;
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  nav {
+    position: fixed;
+    top: 70px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background-color: var(--background-dark);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem;
+    transition: left 0.3s ease-in-out;
+  }
+
+  nav.active {
+    left: 0;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-links li {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .auth-buttons {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .auth-buttons .btn {
+    width: 100%;
+    text-align: center;
   }
 }
